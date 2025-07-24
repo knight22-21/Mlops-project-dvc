@@ -3,8 +3,14 @@ import logging
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OrdinalEncoder
+from utils.common import load_params
 
+# Load parameters
+params = load_params()
+fe_cfg = params.get('feature_engineering', {})
+unknown_val = fe_cfg.get('encode_unknown_value', -1)
 
+# Logging setup
 log_dir = 'logs'
 os.makedirs(log_dir, exist_ok=True)
 
@@ -39,7 +45,7 @@ def feature_engineering(train_df, test_df):
         logger.debug("Combining train and test datasets for feature engineering.")
         df_all = pd.concat([train, test], ignore_index=True)
         
-        logger.debug("Creating New Features.")
+        logger.debug("Creating new features.")
         df_all['event_ratio'] = df_all['social_event_attendance'] / (df_all['going_outside'] + 1)
         df_all['alone_social_ratio'] = df_all['time_spent_alone'] / (df_all['going_outside'] + 1)
         df_all['post_per_friend'] = df_all['post_frequency'] / (df_all['friends_circle_size'] + 1)
@@ -52,10 +58,10 @@ def feature_engineering(train_df, test_df):
             df_all['drained_after_socializing'] * 2
         )
         
-        logger.debug("Encoding remaining categorical features.")
+        logger.debug("Encoding remaining categorical features using unknown_value from config.")
         cat_cols = df_all.select_dtypes(include='object').drop(columns=['personality'], errors='ignore').columns
         if len(cat_cols) > 0:
-            encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
+            encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=unknown_val)
             df_all[cat_cols] = encoder.fit_transform(df_all[cat_cols])
         else:
             logger.debug("No categorical columns to encode.")

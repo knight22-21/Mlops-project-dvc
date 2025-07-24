@@ -24,17 +24,6 @@ fh.setFormatter(formatter)
 logger.addHandler(ch)
 logger.addHandler(fh)
 
-# YAML Params Loader
-# def load_params(params_path: str = 'params.yaml') -> dict:
-#     """Load parameters from a YAML file."""
-#     try:
-#         with open(params_path, 'r') as file:
-#             params = yaml.safe_load(file)
-#         logger.info(f"Parameters loaded successfully from {params_path}")
-#         return params
-#     except Exception as e:
-#         logger.error(f" Failed to load parameters: {e}")
-#         raise
 
 # Data Loader
 def load_data(train_url: str, test_url: str, submission_url: str):
@@ -67,13 +56,6 @@ def save_data(train_df: pd.DataFrame, test_df: pd.DataFrame, submission_df: pd.D
 # Main
 def main():
     try:
-        # params = load_params()
-        # ingestion_cfg = params['data_ingestion']
-
-        # Provide your own dataset URLs here
-        # train_url = ingestion_cfg['train_url']      # <--- You provide this
-        # test_url = ingestion_cfg['test_url']        # <--- You provide this
-        # submission_url = ingestion_cfg['submission_url']  # <--- You provide this
 
         train_url = 'https://raw.githubusercontent.com/knight22-21/Dataset/refs/heads/main/train.csv'  
         test_url = 'https://raw.githubusercontent.com/knight22-21/Dataset/refs/heads/main/test.csv'    

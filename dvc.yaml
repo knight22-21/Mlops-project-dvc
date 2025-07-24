@@ -11,6 +11,9 @@ stages:
     deps:
       - src/data_preprocessing.py
       - data/raw
+    params:
+      - data_preprocessing.fillna_categorical
+      - data_preprocessing.fillna_numeric
     outs:
       - data/interim
 
@@ -19,6 +22,9 @@ stages:
     deps:
       - src/feature_engineering.py
       - data/interim
+    params:
+      - feature_engineering.max_features
+      - feature_engineering.encode_unknown_value
     outs:
       - data/processed
 
@@ -27,6 +33,15 @@ stages:
     deps:
       - src/model_building.py
       - data/processed
+    params:
+      - model_building.n_estimators
+      - model_building.early_stopping_rounds
+      - model_building.max_depth
+      - model_building.eta
+      - model_building.subsample
+      - model_building.colsample_bytree
+      - model_building.random_state
+      - model_building.n_splits
     outs:
       - models/
 
@@ -36,5 +51,8 @@ stages:
       - src/model_evaluation.py
       - models/xgb_model_fold_1.pkl
       - data/processed/train_features.csv  
+    params:
+      - model_evaluation.average
+      - model_evaluation.zero_division
     metrics:
       - reports/metrics.json

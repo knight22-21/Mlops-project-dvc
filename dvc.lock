@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: e0614ec5c0dae89d8cbbfac3740ee693
-      size: 3342
+      md5: ad6fcf3bdaa82efd37a0e6f742a1086e
+      size: 2520
     outs:
     - path: data/raw
       hash: md5
@@ -23,8 +23,12 @@ stages:
       nfiles: 3
     - path: src/data_preprocessing.py
       hash: md5
-      md5: 60ec8c2c8354092428a286b157f4871b
-      size: 3232
+      md5: 4bdbe4018409e405720b9ac486236155
+      size: 3878
+    params:
+      params.yaml:
+        data_preprocessing.fillna_categorical: unknown
+        data_preprocessing.fillna_numeric: mean
     outs:
     - path: data/interim
       hash: md5
@@ -41,8 +45,12 @@ stages:
       nfiles: 2
     - path: src/feature_engineering.py
       hash: md5
-      md5: 864276134fc330e987db621a3c900f02
-      size: 3726
+      md5: 065fb8695717aaa22052da0d3bcb5d04
+      size: 3969
+    params:
+      params.yaml:
+        feature_engineering.encode_unknown_value: -1
+        feature_engineering.max_features: 35
     outs:
     - path: data/processed
       hash: md5
@@ -59,8 +67,18 @@ stages:
       nfiles: 2
     - path: src/model_building.py
       hash: md5
-      md5: 03a392f309bacebfd1752e42a1c5475b
-      size: 4198
+      md5: 3c2ed74cc8cba982f9471fc20ea742db
+      size: 4567
+    params:
+      params.yaml:
+        model_building.colsample_bytree: 0.8
+        model_building.early_stopping_rounds: 20
+        model_building.eta: 0.1
+        model_building.max_depth: 4
+        model_building.n_estimators: 500
+        model_building.n_splits: 5
+        model_building.random_state: 42
+        model_building.subsample: 0.8
     outs:
     - path: models/
       hash: md5
@@ -80,8 +98,12 @@ stages:
       size: 140881
     - path: src/model_evaluation.py
       hash: md5
-      md5: a18ba84f6bcaecfc49acb5321926d5c7
-      size: 3798
+      md5: 6f9f974c08264ab325f83a598126cfe7
+      size: 4161
+    params:
+      params.yaml:
+        model_evaluation.average: weighted
+        model_evaluation.zero_division: 0
     outs:
     - path: reports/metrics.json
       hash: md5

@@ -7,6 +7,24 @@ import pickle
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score
+from utils.common import load_params
+
+# Load parameters
+params = load_params()
+model_cfg = params.get('model_building', {})
+
+XGB_PARAMS = {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "max_depth": model_cfg.get("max_depth", 4),
+    "eta": model_cfg.get("eta", 0.1),
+    "subsample": model_cfg.get("subsample", 0.8),
+    "colsample_bytree": model_cfg.get("colsample_bytree", 0.8),
+    "random_state": model_cfg.get("random_state", 42)
+}
+N_SPLITS = model_cfg.get("n_splits", 5)
+NUM_BOOST_ROUNDS = model_cfg.get("n_estimators", 500)
+EARLY_STOPPING_ROUNDS = model_cfg.get("early_stopping_rounds", 20)
 
 # Setup logging
 log_dir = 'logs'
@@ -28,21 +46,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-# Parammeters
-XGB_PARAMS = {
-    "objective": "binary:logistic",
-    "eval_metric": "logloss",
-    "max_depth": 4,
-    "eta": 0.1,
-    "subsample": 0.8,
-    "colsample_bytree": 0.8,
-    "random_state": 42
-}
-N_SPLITS = 5
-NUM_BOOST_ROUNDS = 500
-EARLY_STOPPING_ROUNDS = 20
-
-def load_data(path: str)-> pd.DataFrame:
+def load_data(path: str) -> pd.DataFrame:
     """Load data from a CSV file."""
     try:
         df = pd.read_csv(path)
@@ -56,7 +60,7 @@ def train_xgboost(X, y, X_test=None):
     """Train an XGBoost model with cross-validation."""
     logger.debug("Starting cross-validated training with XGBoost...")
     
-    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=42)
+    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=XGB_PARAMS["random_state"])
     oof_preds = np.zeros(len(X))
     models = []
     
@@ -74,7 +78,7 @@ def train_xgboost(X, y, X_test=None):
             dtrain,
             num_boost_round=NUM_BOOST_ROUNDS,
             evals=[(dval, 'validation')],
-            early_stopping_rounds = EARLY_STOPPING_ROUNDS,
+            early_stopping_rounds=EARLY_STOPPING_ROUNDS,
             verbose_eval=50
         )
         
@@ -99,8 +103,6 @@ def save_models(models, path: str):
         logger.error(f"Error saving models: {e}")
         raise
 
-    
-    
 def main():
     try:
         df = load_data('./data/processed/train_features.csv')

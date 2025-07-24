@@ -6,6 +6,13 @@ import pandas as pd
 import logging
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+from utils.common import load_params
+
+# Load evaluation config from YAML
+params = load_params()
+eval_cfg = params.get('model_evaluation', {})
+AVERAGE = eval_cfg.get('average', 'weighted')
+ZERO_DIVISION = eval_cfg.get('zero_division', 0)
 
 # Logging setup
 log_dir = 'logs'
@@ -57,14 +64,19 @@ def evaluate(model, X, y_true, label_encoder):
         y_pred = (y_pred > 0.5).astype(int)
 
         acc = accuracy_score(y_true, y_pred)
-        prec = precision_score(y_true, y_pred, average='weighted', zero_division=0)
-        rec = recall_score(y_true, y_pred, average='weighted', zero_division=0)
-        f1 = f1_score(y_true, y_pred, average='weighted', zero_division=0)
+        prec = precision_score(y_true, y_pred, average=AVERAGE, zero_division=ZERO_DIVISION)
+        rec = recall_score(y_true, y_pred, average=AVERAGE, zero_division=ZERO_DIVISION)
+        f1 = f1_score(y_true, y_pred, average=AVERAGE, zero_division=ZERO_DIVISION)
 
         y_true_labels = label_encoder.inverse_transform(y_true)
         y_pred_labels = label_encoder.inverse_transform(y_pred)
 
-        report = classification_report(y_true_labels, y_pred_labels, output_dict=True)
+        report = classification_report(
+            y_true_labels,
+            y_pred_labels,
+            output_dict=True,
+            zero_division=ZERO_DIVISION
+        )
 
         logger.info(f"Evaluation results: Accuracy: {acc:.4f}, Precision: {prec:.4f}, Recall: {rec:.4f}, F1: {f1:.4f}")
 
