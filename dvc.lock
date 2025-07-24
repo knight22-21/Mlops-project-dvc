@@ -74,16 +74,16 @@ stages:
         model_building.colsample_bytree: 0.8
         model_building.early_stopping_rounds: 20
         model_building.eta: 0.1
-        model_building.max_depth: 4
-        model_building.n_estimators: 500
+        model_building.max_depth: 2
+        model_building.n_estimators: 100
         model_building.n_splits: 5
         model_building.random_state: 42
         model_building.subsample: 0.8
     outs:
     - path: models/
       hash: md5
-      md5: 83f050511488118c41ac1a6cb5f4c143.dir
-      size: 769081
+      md5: 9b7c0d0021d2d2e5ef92bc758a8d83e4.dir
+      size: 565668
       nfiles: 7
   model_evaluation:
     cmd: python src/model_evaluation.py
@@ -94,12 +94,12 @@ stages:
       size: 1490292
     - path: models/xgb_model_fold_1.pkl
       hash: md5
-      md5: 65338b922c683e6b33edf9fab29aa6a5
-      size: 140881
+      md5: 90fc28579c20a0278951a5b5c814f207
+      size: 93455
     - path: src/model_evaluation.py
       hash: md5
-      md5: 6f9f974c08264ab325f83a598126cfe7
-      size: 4161
+      md5: 229af41afc5c48b9b9f3eb8d678ab84d
+      size: 4562
     params:
       params.yaml:
         model_evaluation.average: weighted
@@ -107,5 +107,5 @@ stages:
     outs:
     - path: reports/metrics.json
       hash: md5
-      md5: 5b7479fae64eaa8d69f8129a03787f84
-      size: 1034
+      md5: 43071aed0889157fe272702c028d4dbf
+      size: 1039

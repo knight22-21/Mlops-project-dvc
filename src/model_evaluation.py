@@ -7,6 +7,7 @@ import logging
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 from utils.common import load_params
+from dvclive import Live
 
 # Load evaluation config from YAML
 params = load_params()
@@ -122,6 +123,16 @@ def main():
 
         # Evaluate
         metrics = evaluate(model, X, y, le)
+
+        # dvclive experiment tracking
+        with Live(save_dvc_exp=True) as live:
+            live.log_metric('accuracy', metrics['accuracy'])
+            live.log_metric('precision', metrics['precision'])
+            live.log_metric('recall', metrics['recall'])
+            live.log_metric('f1_score', metrics['f1_score'])
+
+            live.log_params(params)
+
         save_metrics(metrics)
 
     except Exception as e:
