@@ -92,12 +92,13 @@ def save_models(models, path: str):
         os.makedirs(path, exist_ok=True)
         for i, model in enumerate(models):
             model_path = os.path.join(path, f"xgb_model_fold_{i+1}.pkl")
-            model.save_model(model_path)
+            with open(model_path, 'wb') as f:
+                pickle.dump(model, f)
             logger.debug(f"Model for fold {i+1} saved to {model_path}")
-            
     except Exception as e:
         logger.error(f"Error saving models: {e}")
         raise
+
     
     
 def main():
