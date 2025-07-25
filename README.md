@@ -1,6 +1,13 @@
 
 
-# 🧠 Introverts vs Extroverts Classifier (Kaggle Playground S5E7)
+# MLOps with DVC: A Reproducible Pipeline Demo
+
+[![GitHub Repo](https://img.shields.io/badge/GitHub-knight22--21/Mlops--project--dvc-blue?logo=github)](https://github.com/knight22-21/Mlops-project-dvc)
+
+This project showcases how to build a **version-controlled, reproducible machine learning pipeline** using [DVC (Data Version Control)](https://dvc.org/) — from raw data ingestion to model evaluation. It uses a classification problem (Introvert vs Extrovert) as a base use case, but the focus is on the **DVC-driven workflow**, not the ML model itself.
+
+
+---
 
 A modular and production-ready machine learning pipeline for classifying individuals as **introverts or extroverts**, built for the [Kaggle Playground Series - Season 5, Episode 7](https://www.kaggle.com/competitions/playground-series-s5e7).
 
@@ -8,7 +15,7 @@ This project integrates **DVC** for data and experiment versioning, **dvclive** 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 
@@ -34,14 +41,23 @@ This project integrates **DVC** for data and experiment versioning, **dvclive** 
 
 ---
 
-## Key Features
+## Key Objectives
 
-- 🔄 **Reproducible ML pipeline** using DVC
-- 📦 **Modular code** for each stage (ingestion, preprocessing, etc.)
-- 🧪 **Experiment tracking** via `dvclive` and `dvc exp`
-- 🔍 **XGBoost + Stratified K-Fold CV** for robust performance
-- 📈 **Live metrics logging** (accuracy, F1, precision, recall)
-- 🧹 **Custom feature engineering and preprocessing**
+✅ Build a modular ML pipeline  
+✅ Version data, models, and experiments using DVC  
+✅ Automate the workflow using `dvc.yaml`  
+✅ Track experiments with `dvclive`  
+✅ Use Git + DVC to manage reproducible workflows
+
+---
+
+## Tools & Frameworks
+
+- **DVC** for pipeline, data & experiment versioning
+- **dvclive** for live metrics tracking
+- **XGBoost** as the model (optional placeholder)
+- **scikit-learn**, **pandas**, **YAML configs**
+- **Python logging** for traceability
 
 ---
 
@@ -116,7 +132,7 @@ model_evaluation
 
 ---
 
-## 📌 Notable Engineering Practices
+## Notable Engineering Practices
 
 * **Logging:** Each script logs both to console and file inside `/logs/`
 * **DVC + Git Integration:** Track experiment history and changes easily
@@ -125,13 +141,13 @@ model_evaluation
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## 🙌 Acknowledgements
+## Acknowledgements
 
 * [Kaggle Playground Series S5E7](https://www.kaggle.com/competitions/playground-series-s5e7)
 * [DVC](https://dvc.org/)
